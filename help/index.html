@@ -1,0 +1,103 @@
+<head>
+    <title>Basic Derivative Help</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="icon" href="https://cdn.glitch.global/c7805c06-7da2-46c3-9bf2-f1031c6d18f6/favicon.png?v=1695944074019">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
+<style>
+    #p{
+        display: none;
+    }
+    #r{
+        margin-bottom: 10px;
+        width: 100%;
+    }
+    #b{
+        width: 100%;
+    }
+</style>
+<div id="e">
+    <h2>Basic Derivative Help</h2>
+    <button id="dl">List</button> <button id="pb">Personal</button>
+    <span id="l">
+        <p>This is how you should enter your answer
+<br>
+Bold means you got it wrong at least once.
+        </p>
+    </span>
+    <span id="p">
+        <p>These are the derivatives you got wrong.
+            <br>
+            Sorted by how many times you got them wrong.
+        </p>
+    </span>
+</div>
+
+<script>
+const a = {
+"sin(x)":"cos(x)",
+"cos(x)":"-sin(x)",
+"tan(x)":"sec^2(x)",
+"sec(x)":"sec(x)tan(x)",
+"csc(x)":"-csc(x)cot(x)",
+"cot(x)":"-csc^2(X)",
+"e^x":"e^x",
+"ln(x)":"1/x",
+"b^x":"b^xln(b)",
+"logb(x)":"1/xln(b)"
+}
+
+const keys = Object.keys(a)
+const values = Object.values(a)
+const Personalized = JSON.parse(localStorage.getItem('incorrect'))
+let str = ''
+for(let i = 0; i < keys.length; i++){
+    if(Personalized){
+        if(Personalized[keys[i]]){
+            str += `<b>${keys[i]}` + ` = ${values[i]}` + "</b><br>"
+        }else{
+            str += `${keys[i]} = ${values[i]}` + "<br>"
+        }
+    }else{
+        str += `${keys[i]} = ${values[i]}` + "<br>"
+    }
+}
+document.getElementById('l').innerHTML += str
+
+if(Personalized){
+    let str = ''
+    if(Personalized.length != 0) {
+    for(let i = 0; i < keys.length; i++){
+        if(Personalized[keys[i]]){
+            const times = Personalized[keys[i]]
+            str += `<b>${keys[i]}</b>` + ` - ${times} ${ times == 1 ? "time" : "times" }` + "<br>"
+        }
+    }
+    document.getElementById('p').innerHTML += str
+}else{
+    document.getElementById('p').innerHTML = "<p>You haven't gotten any wrong yet!</p>"
+}
+}
+const reset = () => {
+if(!confirm("Are you sure? This will reset your stats (including correct & incorrect) immediately and permanently.")) return
+localStorage.clear()
+alert("Stats reset!")
+location.reload()
+}
+
+document.getElementById('e').innerHTML += `<br><button id="r" class="secondary-button" onclick="reset()">Reset Stats</button>`
+
+document.getElementById('e').innerHTML += `<br><button id="b" class="secondary-button" onclick="window.location.href = '/'">Back</button>`
+
+
+document.getElementById('dl').onclick = () => {
+    document.getElementById('l').style.display = 'block'
+    document.getElementById('p').style.display = 'none'
+}
+
+document.getElementById('pb').onclick = () => {
+    document.getElementById('l').style.display = 'none'
+    document.getElementById('p').style.display = 'block'
+}
+
+</script>

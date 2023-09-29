@@ -1,0 +1,88 @@
+<head>
+    <title>Basic Derivative Practice</title>
+    <link rel="stylesheet" href="./style.css">
+    <link rel="icon" href="https://cdn.glitch.global/c7805c06-7da2-46c3-9bf2-f1031c6d18f6/favicon.png?v=1695944074019">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
+<div>
+<p>Find the derivative of <label id="q"></label></p>
+<input id="a" placeholder="Your answer"> <button id="s">Submit</button>  <button class="secondary-button" id="new">New Problem</button>
+<br><br>
+<a href="/help/">Need help?</a>
+<p id="correct"></p>
+</div>
+
+<script>
+const a = {
+"sin(x)":"cos(x)",
+"cos(x)":"-sin(x)",
+"tan(x)":"sec^2(x)",
+"sec(x)":"sec(x)tan(x)",
+"csc(x)":"-csc(x)cot(x)",
+"cot(x)":"-csc^2(X)",
+"e^x":"e^x",
+"ln(x)":"1/x",
+"b^x":"b^xln(b)",
+"logb(x)":"1/xln(b)"
+}
+
+const k = Object.keys(a)
+let q = ''
+
+document.getElementById("new").onclick = () => {
+let d = k[Math.floor(Math.random() * k.length)]
+if(q == d) d = k[Math.floor(Math.random() * k.length)]
+q = d
+if(d == 'logb(x)'){
+    d = `log<sub>b</sub>(x)`
+}
+if(q.includes("^")){
+    d = d.replace("^", "<sup>") + "</sup>"
+}
+document.getElementById('q').innerHTML = d
+}
+
+document.getElementById('s').onclick = () => {
+if(document.getElementById('a').value.toLowerCase() == a[q]){
+    alert("Correct!")
+    document.getElementById('new').click()
+    document.getElementById('a').value = ''
+    const c = localStorage.getItem('correct') || 0
+    localStorage.setItem('correct', parseInt(c) + 1)
+    document.getElementById('correct').innerHTML = `Correct: ${localStorage.getItem('correct')}`
+}else{
+    alert("Wrong")
+    const c = JSON.parse(localStorage.getItem('incorrect'))
+    c[q]++
+    localStorage.setItem('incorrect', JSON.stringify(c))
+}
+}
+
+document.getElementById('new').click()
+if(localStorage.getItem('correct')){
+    document.getElementById('correct').innerHTML = parseInt(localStorage.getItem('correct')) > 0 ? `Correct: ${localStorage.getItem('correct')}` : ""
+}else{
+    localStorage.setItem('correct', `0`)
+}
+
+if(!localStorage.getItem("incorrect")){
+    let obj = {}
+    for(let i = 0; i < k.length; i++){
+        obj[k[i]] = 0
+    }
+    localStorage.setItem("incorrect", JSON.stringify(obj))
+}
+
+window.onresize = () => {
+    if(window.innerWidth < 600){
+        document.getElementById('new').innerHTML = "New"
+    }else{
+        document.getElementById('new').innerHTML = "New Problem"
+    }
+}
+
+// detect if mobile
+if(window.innerWidth < 600){
+    document.getElementById('new').innerHTML = "New"
+}
+</script>
