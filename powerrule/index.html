@@ -1,0 +1,86 @@
+<head>
+    <title>Power Rule Practice</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="icon" href="https://cdn.glitch.global/c7805c06-7da2-46c3-9bf2-f1031c6d18f6/favicon.png?v=1695944074019">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
+<style>
+    #h{
+        cursor: pointer;
+        text-decoration: underline;
+    }
+</style>
+
+<div class="main">
+    <p>Find the derivative of <label id="q"></label></p>
+    <input id="a" placeholder="Your answer"> <button id="s">Submit</button>  <button class="secondary-button" id="new">New Problem</button>
+    <br><br>
+    <p id="pr_correct"></p>
+    <p id="h" onclick="help()">Need help?</p>
+    </div>
+
+
+<script>
+let power = 0
+let coeff = 0
+
+document.getElementById('new').onclick = () => {
+const _power = Math.floor(Math.random() * 8) + 1
+const _coeff = Math.floor(Math.random() * 8) + 1
+power = _power
+coeff = _coeff
+console.log(power, coeff)
+document.getElementById('q').innerHTML = `${coeff}x<sup>${power}</sup>`
+}
+
+document.getElementById('new').click()
+
+const help = () => {
+const _power = Math.floor(Math.random() * 8) + 1
+const _coeff = Math.floor(Math.random() * 8) + 1
+const ex_p = `${_coeff}x^${_power}`
+const ex_a = `${_power * coeff}x^${_power - 1}`
+alert(`Power Rule \n d/dx x^n = nx^n-1 \n \n Example \n f(x) = ${ex_p} \n f'(x) = ${ex_a}`)
+}
+
+document.getElementById('s').onclick = () => {
+let x = `x^${power - 1}`
+if(power == '1') x = 'x'
+if(power == '0') x = ''
+if(document.getElementById('a').value.toLowerCase() == `${power * coeff}${x}`){
+    alert("Correct!")
+    document.getElementById('new').click()
+    document.getElementById('a').value = ''
+    const c = localStorage.getItem('pr_correct') || 0
+    localStorage.setItem('pr_correct', parseInt(c) + 1)
+    document.getElementById('pr_correct').innerHTML = `Correct: ${localStorage.getItem('pr_correct')}`
+}else{
+    alert("Wrong")
+}
+}
+
+if(localStorage.getItem('pr_correct')){
+    document.getElementById('pr_correct').innerHTML = parseInt(localStorage.getItem('pr_correct')) > 0 ? `Correct: ${localStorage.getItem('pr_correct')}` : ""
+}else{
+    localStorage.setItem('pr_correct', `0`)
+}
+
+window.onresize = () => {
+    if(window.innerWidth < 600){
+        document.getElementById('new').innerHTML = "New"
+    }else{
+        document.getElementById('new').innerHTML = "New Problem"
+    }
+}
+
+if(window.innerWidth < 600){
+    document.getElementById('new').innerHTML = "New"
+}
+
+document.getElementById('a').addEventListener("keyup", function(event) {
+  if (event.keyCode === 13) {
+   event.preventDefault();
+   document.getElementById("s").click();
+  }
+});
+</script>
